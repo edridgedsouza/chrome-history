@@ -47,7 +47,7 @@ names(freq) <- c("Hour", "Activity")
 
 
 # Create a plot for `sum`
-svg(filename = "ActivityOverTime.svg", height=5, width=10) # CairoWin(), optionally
+CairoPNG(filename = "ActivityOverTime.png", height=500, width=1000) # svg() or CairoWin(), optionally
 ggplot(sum, aes(Date,activity)) + 
   geom_line(aes(Date,activity), color = "#FF5050", size=1.5) + 
   geom_smooth() + 
