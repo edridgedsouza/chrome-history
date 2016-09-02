@@ -8,8 +8,8 @@ library(dplyr)
 library(ggthemes)
 library(Cairo)
 
-round_minute <- function(x,precision){  #Credit for this function goes to https://stackoverflow.com/questions/16803867/round-a-date-in-r-to-an-arbitrary-level-of-precision
-  m <- minute(x)+second(x)/60
+round_minute <- function(x,precision){  # Credit for this function goes to https://stackoverflow.com/questions/16803867/round-a-date-in-r-to-an-arbitrary-level-of-precision
+  m <- minute(x) + second(x)/60
   m.r <- round(m/precision)*precision
   minute(x) <- m.r
   second(x) <- 0
@@ -23,11 +23,12 @@ history <- read.csv("my-history.csv")                     #However, instructions
 
 names(history) <- c("Time", "url")
 
-
-history$ParseTime <- ymd_hms(history$Time)
-history$Date <- date(history$ParseTime)
-history$Hour <- sapply(as.character(history$Time), substr, 12, 1000)
-history$RoundHour <- strptime(history$Hour, "%H:%M:%S") %>% round_minute(15) %>% as.character.Date()
+history <- history %>%
+  mutate(ParseTime = ymd_hms(Time),
+         Date = date(ParseTime),
+         Hour = sapply(as.character(Time), substr, 12, 1000),
+         RoundHour = strptime(Hour, "%H:%M:%S") %>% round_minute(15) %>% as.character.Date()
+         )
 
 # `sum` gives you total activity per day over time.
 sum <- history %>%
@@ -41,8 +42,8 @@ freq <- history %>%
   filter(month(Date) > 2 & year(Date) >= 2016) %>%
   group_by(RoundHour) %>%
   summarize(frequency = length(RoundHour)) %>%
-  ungroup()
-freq$RoundHour <- ymd_hms(freq$RoundHour)
+  ungroup() %>%
+  mutate(RoundHour = ymd_hms(RoundHour))
 names(freq) <- c("Hour", "Activity")
 
 
