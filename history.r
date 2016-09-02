@@ -16,10 +16,16 @@ round_minute <- function(x,precision){  # Credit for this function goes to https
   x
 }
 
-setwd("C:\\Users\\edridge\\Downloads\\Kaggle\\History")   #Sorry, not including my original CSV file for privacy reasons.
-history <- read.csv("my-history.csv")                     #However, instructions on how to make your own are at https://superuser.com/questions/602252/can-chrome-browser-history-be-exported-to-an-html-file
-#This file, for whatever reason, didn't include my actual whole history, which goes back to late 2014. 
-#It includes everything from March 2016 until 6/6/16, as well as one page from 2015 and some bookmark files stored as if they were from 1960.
+                    
+# Sorry, not including my original CSV file for privacy reasons.
+# However, instructions on how to make your own are at 
+# https://superuser.com/questions/602252/can-chrome-browser-history-be-exported-to-an-html-file
+# This file, for whatever reason, didn't include my actual whole history, 
+# which goes back to late 2014. It includes everything from March 2016 until 6/6/16,
+# as well as one page from 2015 and some bookmark files stored as if they were from 1960.
+
+setwd(parent.env(2)$ofile) # Current working directory when sourced
+history <- read.csv("./data/my-history.csv") 
 
 names(history) <- c("Time", "url")
 
@@ -48,24 +54,26 @@ names(freq) <- c("Hour", "Activity")
 
 
 # Create a plot for `sum`
-CairoPNG(filename = "ActivityOverTime.png", height=500, width=1000) # svg() or CairoWin(), optionally
+CairoPNG(filename = "ActivityOverTime.png", height = 500, width = 1000) # svg() or CairoWin(), optionally
 ggplot(sum, aes(Date,activity)) + 
-  geom_line(aes(Date,activity), color = "#FF5050", size=1.5) + 
+  geom_line(aes(Date,activity), color = "#FF5050", size = 1.5) + 
   geom_smooth() + 
   theme_fivethirtyeight()
 dev.off()
 
 
 # Create a plot for `freq`. This is honestly more informative than the `sum` plot.
-CairoPNG(filename="WebUsage.png", height=500, width=1000)
+CairoPNG(filename = "WebUsage.png", height = 500, width = 1000)
 usagePlot <- ggplot(freq, aes(Hour, Activity)) + 
-  geom_line(color="#FF5050", size=1.5, alpha=0.7) + 
+  geom_line(color = "#FF5050", size = 1.5, alpha = 0.7) + 
   geom_point() + 
-  geom_smooth(alpha=0.5) +
+  geom_smooth(alpha = 0.5) +
   theme_fivethirtyeight() +
   scale_x_datetime(labels = date_format("%H:%M"), breaks = date_breaks("2 hour")) +
   ggtitle("Total Internet usage since March")
 usagePlot
 dev.off()
 
-### These are my first two exploratory analyses. More will come in the future when I get time to analyze this file in more depth.
+### These are my first two exploratory analyses. 
+### More will come in the future when I get time to analyze this file in more depth.
+### Or perhaps I'll find a better method to get history data

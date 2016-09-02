@@ -46,3 +46,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Excluding my personal history CSV file
+data/my-history.csv
