@@ -24,7 +24,7 @@ round_minute <- function(x,precision){  # Credit for this function goes to https
 # which goes back to late 2014. It includes everything from March 2016 until 6/6/16,
 # as well as one page from 2015 and some bookmark files stored as if they were from 1960.
 
-setwd(parent.env(2)$ofile) # Current working directory when sourced
+setwd(dirname(parent.frame(2)$ofile)) # Current working directory when sourced
 history <- read.csv("./data/my-history.csv") 
 
 names(history) <- c("Time", "url")
